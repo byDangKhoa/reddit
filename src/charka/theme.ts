@@ -11,7 +11,7 @@ export const theme = extendTheme({
     },
   },
   fonts: {
-    body: `'Open Sans', sans-serif`,
+    body: `'verdana', sans-serif`,
   },
   styles: {
     global: function () {

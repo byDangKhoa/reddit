@@ -1,37 +1,27 @@
-import {
-  Button,
-  Flex,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input,
-  Text,
-} from '@chakra-ui/react'
-import { Bubblegum_Sans } from '@next/font/google'
+import { authModalState } from '@/atoms/AuthModalAtom'
+import { FIREBASE_ERRORS } from '@/firebase/errors'
+import { background, Button, Flex, Input, Text } from '@chakra-ui/react'
+import { Bubblegum_Sans, Preahvihear } from '@next/font/google'
 import { generateKey } from 'crypto'
 import React, { useState } from 'react'
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
+import { useSetRecoilState } from 'recoil'
+import { auth } from '../../../firebase/clientApp'
 
 type Props = {}
 
 export default function Login({}: Props) {
+  const setAuthModalState = useSetRecoilState(authModalState)
   const [loginForm, setLoginForm] = useState({
     email: '',
     password: '',
   })
-  const [formError, setFormError] = useState('')
-
-  //   const [signInWithEmailAndPassword, _, loading, authError] =
-  //     useSignInWithEmailAndPassword(auth)
+  const [signInWithEmailAndPassword, _, loading, authError] =
+    useSignInWithEmailAndPassword(auth)
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (formError) setFormError('')
-    if (!loginForm.email.includes('@')) {
-      return setFormError('Please enter a valid email')
-    }
-
-    // Valid form inputs
-    // signInWithEmailAndPassword(form.email, form.password)
+    signInWithEmailAndPassword(loginForm.email, loginForm.password)
   }
 
   const onChange = ({
@@ -45,6 +35,7 @@ export default function Login({}: Props) {
   return (
     <form onSubmit={onSubmit}>
       <Input
+        borderRadius='60px'
         required
         name='email'
         placeholder='email'
@@ -65,6 +56,7 @@ export default function Login({}: Props) {
         bg='gray.50'
       />
       <Input
+        borderRadius='60px'
         required
         name='password'
         placeholder='password'
@@ -84,21 +76,24 @@ export default function Login({}: Props) {
         }}
         bg='gray.50'
       />
-      <Text textAlign='center' mt={2} fontSize='10pt' color='red'>
-        {/* {formError ||
-          FIREBASE_ERRORS[authError?.message as keyof typeof FIREBASE_ERRORS]} */}
-      </Text>
+
       <Button
+        bg='rgb(217, 58, 0)'
         width='100%'
         height='36px'
         mb={2}
         mt={2}
+        _hover={{ bg: 'rgb(217, 78, 0)' }}
         type='submit'
-        // isLoading={loading}
-      >
+        isLoading={loading}>
         Log In
       </Button>
-      {/* <Flex justifyContent='center' mb={2}>
+      {authError && (
+        <Text textAlign='left' mt={2} fontSize='10pt' color='red'>
+          {FIREBASE_ERRORS[authError?.message as keyof typeof FIREBASE_ERRORS]}
+        </Text>
+      )}
+      <Flex justifyContent='center' mb={2}>
         <Text fontSize='9pt' mr={1}>
           Forgot your password?
         </Text>
@@ -106,7 +101,9 @@ export default function Login({}: Props) {
           fontSize='9pt'
           color='blue.500'
           cursor='pointer'
-          onClick={() => toggleView('resetPassword')}>
+          onClick={() =>
+            setAuthModalState((prev) => ({ ...prev, type: 'resetPassword' }))
+          }>
           Reset
         </Text>
       </Flex>
@@ -116,10 +113,12 @@ export default function Login({}: Props) {
           color='blue.500'
           fontWeight={700}
           cursor='pointer'
-          onClick={() => toggleView('signup')}>
+          onClick={() =>
+            setAuthModalState((prev) => ({ ...prev, type: 'signup' }))
+          }>
           SIGN UP
         </Text>
-      </Flex> */}
+      </Flex>
     </form>
   )
 }
