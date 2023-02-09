@@ -38,7 +38,7 @@ export default function AuthModal() {
 
   return (
     <>
-      <Modal isOpen={modalState.open} onClose={handleClose}>
+      <Modal size='sm' isOpen={modalState.open} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent width='70%'>
           <ModalCloseButton />

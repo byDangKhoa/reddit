@@ -33,7 +33,7 @@ export default function UserMenu({ user }: Props) {
   return (
     <Menu>
       <MenuButton
-        width={{ base: 'auto', md: '200px' }}
+        width={{ base: 'auto', md: user ? '200px' : 'auto' }}
         cursor='pointer'
         padding='0 6px'
         borderRadius={4}
