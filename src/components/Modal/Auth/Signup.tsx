@@ -102,6 +102,7 @@ export default function Signup({}: Props) {
       {(formError || userError) && (
         <Text textAlign='left' mt={2} fontSize='10pt' color='red'>
           {formError ||
+            // control firebase error message
             FIREBASE_ERRORS[userError?.message as keyof typeof FIREBASE_ERRORS]}
         </Text>
       )}

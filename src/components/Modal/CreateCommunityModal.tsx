@@ -17,14 +17,21 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
-import { doc, runTransaction, serverTimestamp } from 'firebase/firestore'
+import {
+  doc,
+  getDoc,
+  runTransaction,
+  serverTimestamp,
+  setDoc,
+} from 'firebase/firestore'
 import { useRouter } from 'next/router'
 import { BsFillEyeFill, BsFillPersonFill } from 'react-icons/bs'
 import { HiLockClosed } from 'react-icons/hi'
 import { useSetRecoilState } from 'recoil'
 
-import { firestore } from '@/firebase/clientApp'
+import { auth, firestore } from '@/firebase/clientApp'
 import { communityState } from '@/atoms/CommunitiesAtom'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 type CreateCommunityModalProps = {
   isOpen: boolean
@@ -54,49 +61,45 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
 
   const handleCreateCommunity = async () => {
     if (nameError) setNameError('')
+    //validate community name
     const format = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/
-
     if (format.test(name) || name.length < 3) {
       return setNameError(
         'Community names must be between 3–21 characters, and can only contain letters, numbers, or underscores.'
       )
     }
-
     setLoading(true)
     try {
       // Create community document and communitySnippet subcollection document on user
       const communityDocRef = doc(firestore, 'communities', name)
-      await runTransaction(firestore, async (transaction) => {
-        const communityDoc = await transaction.get(communityDocRef)
-        if (communityDoc.exists()) {
-          throw new Error(`Sorry, /r${name} is taken. Try another.`)
-        }
+      // await runTransaction(firestore, async (transaction) => {
+      const communityDoc = await getDoc(communityDocRef)
+      if (communityDoc.exists()) {
+        throw new Error(`Sorry, /r${name} is taken. Try another.`)
+      }
 
-        transaction.set(communityDocRef, {
-          creatorId: userId,
-          createdAt: serverTimestamp(),
-          numberOfMembers: 1,
-          privacyType: 'public',
-        })
-
-        transaction.set(
-          doc(firestore, `users/${userId}/communitySnippets`, name),
-          {
-            communityId: name,
-            isModerator: true,
-          }
-        )
+      await setDoc(communityDocRef, {
+        creatorId: userId,
+        createdAt: serverTimestamp(),
+        numberOfMembers: 1,
+        privacyType: communityType,
       })
+      handleClose()
+      // setDoc(doc(firestore, `users/${userId}/communitySnippets`, name), {
+      //   communityId: name,
+      //   isModerator: true,
+      // })
+      // })
     } catch (error: any) {
       console.log('Transaction error', error)
       setNameError(error.message)
     }
-    setSnippetState((prev) => ({
-      ...prev,
-      mySnippets: [],
-    }))
-    handleClose()
-    router.push(`r/${name}`)
+    // setSnippetState((prev) => ({
+    //   ...prev,
+    //   mySnippets: [],
+    // }))
+
+    // router.push(`r/${name}`)
     setLoading(false)
   }
 
