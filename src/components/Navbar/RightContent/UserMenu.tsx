@@ -20,8 +20,9 @@ import { IoSparkles } from 'react-icons/io5'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { CgProfile } from 'react-icons/cg'
 import { MdOutlineLogin } from 'react-icons/md'
-import { useSetRecoilState } from 'recoil'
+import { useResetRecoilState, useSetRecoilState } from 'recoil'
 import { authModalState } from '@/atoms/AuthModalAtom'
+import { communityState } from '@/atoms/CommunitiesAtom'
 
 type Props = {
   user?: User | null
@@ -29,7 +30,14 @@ type Props = {
 
 export default function UserMenu({ user }: Props) {
   const setAuthModalState = useSetRecoilState(authModalState)
-  const [signOut] = useSignOut(auth)
+  const resetCommunityState = useResetRecoilState(communityState)
+  const [signout] = useSignOut(auth)
+  const logout = async () => {
+    await signout()
+    //clear community state
+    resetCommunityState()
+  }
+
   return (
     <Menu>
       <MenuButton
@@ -81,7 +89,7 @@ export default function UserMenu({ user }: Props) {
               fontSize='10pt'
               fontWeight={700}
               _hover={{ bg: 'blue.500', color: 'white' }}
-              onClick={() => signOut()}>
+              onClick={logout}>
               <Flex alignItems='center'>
                 <Icon fontSize={20} mr={2} as={MdOutlineLogin} />
                 Log Out

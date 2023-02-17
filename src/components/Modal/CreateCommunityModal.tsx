@@ -52,7 +52,7 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  //Check số lương char khi tạo community
+  //Check char length create community
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 21) return
     setName(event.target.value)
@@ -72,24 +72,29 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
     try {
       // Create community document and communitySnippet subcollection document on user
       const communityDocRef = doc(firestore, 'communities', name)
-      // await runTransaction(firestore, async (transaction) => {
-      const communityDoc = await getDoc(communityDocRef)
-      if (communityDoc.exists()) {
-        throw new Error(`Sorry, /r${name} is taken. Try another.`)
-      }
-
-      await setDoc(communityDocRef, {
-        creatorId: userId,
-        createdAt: serverTimestamp(),
-        numberOfMembers: 1,
-        privacyType: communityType,
+      await runTransaction(firestore, async (transaction) => {
+        const communityDoc = await transaction.get(communityDocRef)
+        //check community exist
+        if (communityDoc.exists()) {
+          throw new Error(`Sorry, /r${name} is taken. Try another.`)
+        }
+        //create community
+        transaction.set(communityDocRef, {
+          creatorId: userId,
+          createdAt: serverTimestamp(),
+          numberOfMembers: 1,
+          privacyType: communityType,
+        })
+        //create community snippets on user
+        transaction.set(
+          doc(firestore, `users/${userId}/communitySnippets`, name),
+          {
+            communityId: name,
+            isModerator: true,
+          }
+        )
+        handleClose()
       })
-      handleClose()
-      // setDoc(doc(firestore, `users/${userId}/communitySnippets`, name), {
-      //   communityId: name,
-      //   isModerator: true,
-      // })
-      // })
     } catch (error: any) {
       console.log('Transaction error', error)
       setNameError(error.message)
