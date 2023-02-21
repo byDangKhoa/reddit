@@ -8,6 +8,16 @@ export const Button: ComponentStyleConfig = {
     _focus: {
       boxShadow: 'none',
     },
+    _disabled: {
+      bg: 'black',
+      color: 'gray.500',
+      filter: 'grayscale(1)',
+      _hover: {
+        _disabled: {
+          bg: 'gray.900',
+        },
+      },
+    },
   },
   sizes: {
     sm: {

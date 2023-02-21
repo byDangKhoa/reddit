@@ -39,11 +39,11 @@ type CreateCommunityModalProps = {
   userId: string
 }
 
-const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
+const CreateCommunityModal = ({
   isOpen,
   handleClose,
   userId,
-}) => {
+}: CreateCommunityModalProps) => {
   const setSnippetState = useSetRecoilState(communityState)
   const [name, setName] = useState('')
   const [charsRemaining, setCharsRemaining] = useState(21)

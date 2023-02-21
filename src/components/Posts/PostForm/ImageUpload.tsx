@@ -9,13 +9,13 @@ type ImageUploadProps = {
   onSelectImage: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({
+const ImageUpload = ({
   selectedFile,
   setSelectedFile,
   setSelectedTab,
   selectFileRef,
   onSelectImage,
-}) => {
+}: ImageUploadProps) => {
   return (
     <Flex direction='column' justify='center' align='center' width='100%'>
       {selectedFile ? (

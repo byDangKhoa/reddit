@@ -7,7 +7,7 @@ interface PageContentProps {
 }
 
 // Assumes array of two children are passed
-const PageContent: React.FC<PageContentProps> = ({ children, maxWidth }) => {
+const PageContent = ({ children, maxWidth }: PageContentProps) => {
   return (
     <Flex justify='center' p='16px 0px'>
       <Flex width='95%' justify='center' maxWidth={maxWidth || '860px'}>

@@ -8,6 +8,11 @@ import {
   Stack,
   Textarea,
   Image,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Text,
 } from '@chakra-ui/react'
 
 import {
@@ -61,7 +66,7 @@ export type TabItem = {
 }
 
 type NewPostFormProps = {
-  user: User[]
+  user?: User | null
 }
 
 const NewPostForm = ({ user }: NewPostFormProps) => {
@@ -83,8 +88,8 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
     const communityId = router.query.id
     const body = {
       communityId: communityId as unknown as string,
-      creatorId: user[0].uid,
-      creatorDisplayName: user[0].email!.split('@')[0],
+      creatorId: user?.uid,
+      creatorDisplayName: user?.email!.split('@')[0],
       title: textInputs.title,
       body: textInputs.body,
       numberOfComments: 0,
@@ -183,6 +188,12 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
           />
         )}
       </Flex>
+      {error && (
+        <Alert status='error'>
+          <AlertIcon />
+          <Text>Error creating post</Text>
+        </Alert>
+      )}
     </Flex>
   )
 }

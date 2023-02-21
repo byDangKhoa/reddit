@@ -14,7 +14,7 @@ export default function SubmitPage() {
         <Box p='14px 0px' borderBottom='1px solid' borderColor='white'>
           <Text fontWeight={600}>Create a post</Text>
         </Box>
-        {user && <NewPostForm user={user}></NewPostForm>}
+        {user && <NewPostForm user={user[0]}></NewPostForm>}
       </>
       <>RHS</>
     </PageContent>

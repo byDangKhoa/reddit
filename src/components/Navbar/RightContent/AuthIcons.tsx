@@ -13,7 +13,7 @@ import {
 
 type ActionIconsProps = {}
 
-const ActionIcons: React.FC<ActionIconsProps> = () => {
+const ActionIcons = () => {
   //   const { toggleMenuOpen } = useDirectory()
   return (
     <Flex alignItems='center' flexGrow={1}>

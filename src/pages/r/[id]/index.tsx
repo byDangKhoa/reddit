@@ -13,6 +13,7 @@ import safeJsonStringify from 'safe-json-stringify'
 import PageContent from '@/components/Layout/PageContent'
 import CreatePostLink from '@/components/Community/CreatePostLink'
 import CommunityNotFound from '@/components/Community/CommunityNotFound'
+import Posts from '@/components/Posts/Post'
 
 interface CommunityPageProps {
   communityData: Community
@@ -42,11 +43,11 @@ const CommunityPage = ({ communityData }: CommunityPageProps) => {
       <PageContent>
         <>
           <CreatePostLink />
-          {/* <Posts
+          <Posts
             communityData={communityData}
             userId={user?.uid}
             loadingUser={loadingUser}
-          /> */}
+          />
         </>
 
         <>

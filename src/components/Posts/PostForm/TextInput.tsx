@@ -13,12 +13,12 @@ type TextInputsProps = {
   loading: boolean
 }
 
-const TextInputs: React.FC<TextInputsProps> = ({
+const TextInputs = ({
   textInputs,
   onChange,
   handleCreatePost,
   loading,
-}) => {
+}: TextInputsProps) => {
   return (
     <Stack spacing={3} width='100%'>
       <Input
@@ -55,7 +55,7 @@ const TextInputs: React.FC<TextInputsProps> = ({
         <Button
           height='34px'
           padding='0px 30px'
-          disabled={!textInputs.title}
+          isDisabled={!textInputs.title}
           isLoading={loading}
           onClick={handleCreatePost}>
           Post
