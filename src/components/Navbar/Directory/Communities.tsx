@@ -16,6 +16,7 @@ type CommunitiesProps = {
 
 const Communities = ({ menuOpen }: CommunitiesProps) => {
   const [user] = useAuthState(auth)
+
   const [open, setOpen] = useState(false)
   const mySnippets = useRecoilValue(communityState).mySnippets
 
@@ -24,7 +25,7 @@ const Communities = ({ menuOpen }: CommunitiesProps) => {
       <CreateCommunityModal
         isOpen={open}
         handleClose={() => setOpen(false)}
-        userId={user[0]?.uid!}
+        userId={user?.uid!}
       />
       {/* COULD DO THIS FOR CLEANER COMPONENTS */}
       {/* <Moderating snippets={snippetState.filter((item) => item.isModerator)} />

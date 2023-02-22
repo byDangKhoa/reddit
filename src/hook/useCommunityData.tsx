@@ -31,7 +31,6 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
       setCommunityStateValue((prev) => ({
         ...prev,
         mySnippets: snippets as CommunitySnippet[],
-        initSnippetsFetched: true,
       }))
       setLoading(false)
     } catch (error: any) {
@@ -151,12 +150,12 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
   }, [user])
   useEffect(() => {
     // if (ssrCommunityData) return;
-    const { community } = router.query
-    if (community) {
+    const communityId = router.query.id
+    if (communityId) {
       const communityData = communityStateValue.currentCommunity
 
-      if (!communityData.id) {
-        getCommunityData(community as string)
+      if (!communityData?.id) {
+        getCommunityData(communityId as string)
         return
       }
     } else {

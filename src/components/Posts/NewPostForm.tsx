@@ -36,6 +36,7 @@ import TextInputs from './PostForm/TextInput'
 import ImageUpload from './PostForm/ImageUpload'
 import { User } from 'firebase/auth'
 import { Post } from '@/atoms/PostAtom'
+import useSelectFile from '@/hook/useSelectFile'
 
 const formTabs = [
   {
@@ -75,7 +76,8 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
     title: '',
     body: '',
   })
-  const [selectedFile, setSelectedFile] = useState<string>()
+
+  const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile()
   const selectFileRef = useRef<HTMLInputElement>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -104,7 +106,7 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
       //   editedAt: serverTimestamp() as unknown as Timestamp,
       createdAt: serverTimestamp() as unknown as Timestamp,
     }
-    console.log('newpost', body)
+
     try {
       const postDocRef = await addDoc(collection(firestore, 'posts'), body)
 
@@ -112,7 +114,6 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
 
       // // check if selectedFile exists, if it does, do image processing
       if (selectedFile) {
-        console.log('file', selectedFile)
         const imageRef = ref(storage, `posts/${postDocRef.id}/image`)
         await uploadString(imageRef, selectedFile, 'data_url')
         const downloadURL = await getDownloadURL(imageRef)
@@ -127,25 +128,12 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
       //     ...prev,
       //     postUpdateRequired: true,
       //   }))
-      router.back()
+      router.push(`/r/${router.query.id}`)
     } catch (error) {
       console.log('createPost error', error)
       setError('Error creating post')
     }
     setLoading(false)
-  }
-
-  const onSelectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader()
-    if (event.target.files?.[0]) {
-      reader.readAsDataURL(event.target.files[0])
-    }
-
-    reader.onload = (readerEvent) => {
-      if (readerEvent.target?.result) {
-        setSelectedFile(readerEvent.target?.result as string)
-      }
-    }
   }
 
   const onTextChange = ({
@@ -184,7 +172,7 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
             setSelectedFile={setSelectedFile}
             setSelectedTab={setSelectedTab}
             selectFileRef={selectFileRef}
-            onSelectImage={onSelectImage}
+            onSelectImage={onSelectFile}
           />
         )}
       </Flex>

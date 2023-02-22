@@ -28,12 +28,12 @@ const usePosts = (communityData?: Community) => {
   const router = useRouter()
   const communityStateValue = useRecoilValue(communityState)
 
-  const onSelectPost = (post: Post, postIdx: number) => {
-    console.log('HERE IS STUFF', post, postIdx)
+  const onSelectPost = (post: Post) => {
+    console.log('HERE IS STUFF', post)
 
     setPostStateValue((prev) => ({
       ...prev,
-      selectedPost: { ...post, postIdx },
+      selectedPost: post,
     }))
     router.push(`/r/${post.communityId}/comments/${post.id}`)
   }
@@ -154,16 +154,19 @@ const usePosts = (communityData?: Community) => {
        * Used for single page view [pid]
        * since we don't have real-time listener there
        */
-      if (updatedState.selectedPost) {
-        updatedState = {
-          ...updatedState,
+      // if (updatedState.selectedPost) {
+      //   updatedState = {
+      //     ...updatedState,
+      //     selectedPost: updatedPost,
+      //   }
+      // }
+      // setPostStateValue(updatedState)
+      if (postStateValue.selectedPost) {
+        setPostStateValue((prev) => ({
+          ...prev,
           selectedPost: updatedPost,
-        }
+        }))
       }
-
-      // Optimistically update the UI
-      setPostStateValue(updatedState)
-
       // Update database
       const postRef = doc(firestore, 'posts', post.id)
       batch.update(postRef, { voteStatus: voteStatus + voteChange })
@@ -177,13 +180,13 @@ const usePosts = (communityData?: Community) => {
     console.log('DELETING POST: ', post.id)
 
     try {
-      // if post has an image url, delete it from storage
+      // del img from storage
       if (post.imageURL) {
         const imageRef = ref(storage, `posts/${post.id}/image`)
         await deleteObject(imageRef)
       }
 
-      // delete post from posts collection
+      // del post from db
       const postDocRef = doc(firestore, 'posts', post.id)
       await deleteDoc(postDocRef)
 

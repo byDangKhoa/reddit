@@ -21,7 +21,7 @@ const ImageUpload = ({
       {selectedFile ? (
         <>
           <Image
-            alt='image'
+            alt='post image'
             src={selectedFile as string}
             maxWidth='400px'
             maxHeight='400px'

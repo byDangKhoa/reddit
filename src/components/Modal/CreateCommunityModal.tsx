@@ -50,7 +50,6 @@ const CreateCommunityModal = ({
   const [nameError, setNameError] = useState('')
   const [communityType, setCommunityType] = useState('public')
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
 
   //Check char length create community
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

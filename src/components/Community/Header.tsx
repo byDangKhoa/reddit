@@ -3,8 +3,9 @@ import { Box, Button, Flex, Icon, Text, Image } from '@chakra-ui/react'
 import { FaReddit } from 'react-icons/fa'
 
 import { useSetRecoilState } from 'recoil'
-import useCommunityData from '@/hook/useCommunityData'
+
 import { Community } from '@/atoms/CommunitiesAtom'
+import useCommunityData from '@/hook/useCommunityData'
 
 type HeaderProps = {
   communityData: Community
@@ -17,6 +18,7 @@ const Header: React.FC<HeaderProps> = ({ communityData }) => {
    */
   const { communityStateValue, loading, error, onJoinLeaveCommunity } =
     useCommunityData(!!communityData)
+  console.log('communityStateValue', communityStateValue)
   const isJoined = !!communityStateValue.mySnippets.find(
     (item) => item.communityId === communityData.id
   )
@@ -27,12 +29,12 @@ const Header: React.FC<HeaderProps> = ({ communityData }) => {
       <Flex justifyContent='center' bg='white' height='50%'>
         <Flex width='95%' maxWidth='860px'>
           {/* IMAGE URL IS ADDED AT THE VERY END BEFORE DUMMY DATA - USE ICON AT FIRST */}
-          {communityStateValue.currentCommunity.imageURL ? (
+          {communityStateValue?.currentCommunity?.imageURL ? (
             <Image
               borderRadius='full'
               boxSize='66px'
               src={communityStateValue.currentCommunity.imageURL}
-              alt='Dan Abramov'
+              alt='community image'
               position='relative'
               top={-3}
               color='blue.500'

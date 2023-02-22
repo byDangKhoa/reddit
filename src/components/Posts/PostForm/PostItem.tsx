@@ -7,9 +7,10 @@ import {
   Spinner,
   Stack,
   Text,
+  useToast,
 } from '@chakra-ui/react'
 import { formatDistanceToNow } from 'date-fns'
-import { NextRouter } from 'next/router'
+import { NextRouter, useRouter } from 'next/router'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { BsChat, BsDot } from 'react-icons/bs'
 import { FaReddit } from 'react-icons/fa'
@@ -36,7 +37,7 @@ export type PostItemContentProps = {
   ) => void
   onDeletePost: (post: Post) => Promise<boolean>
   userIsCreator: boolean
-  onSelectPost?: (value: Post, postIdx: number) => void
+  onSelectPost?: (value: Post) => void
   router?: NextRouter
   postIdx?: number
   userVoteValue?: number
@@ -45,10 +46,8 @@ export type PostItemContentProps = {
 
 const PostItem = ({
   post,
-  postIdx,
   onVote,
   onSelectPost,
-  router,
   onDeletePost,
   userVoteValue,
   userIsCreator,
@@ -57,6 +56,8 @@ const PostItem = ({
   const [loadingImage, setLoadingImage] = useState(true)
   const [loadingDelete, setLoadingDelete] = useState(false)
   const singlePostView = !onSelectPost // function not passed to [pid]
+  const router = useRouter()
+  const toast = useToast()
 
   const handleDelete = async (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -66,17 +67,23 @@ const PostItem = ({
     try {
       const success = await onDeletePost(post)
       if (!success) throw new Error('Failed to delete post')
+      toast({
+        title: 'Post',
+        description: "'Post successfully deleted'",
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
 
-      console.log('Post successfully deleted')
-
-      // Could proably move this logic to onDeletePost function
-      if (router) router.back()
+      router.push(`/r/${router.query.id}`)
     } catch (error: any) {
-      console.log('Error deleting post', error.message)
-      /**
-       * Don't need to setLoading false if no error
-       * as item will be removed from DOM
-       */
+      toast({
+        title: 'Post',
+        description: error.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
       setLoadingDelete(false)
       // setError
     }
@@ -90,7 +97,7 @@ const PostItem = ({
       borderRadius={singlePostView ? '4px 4px 0px 0px' : 4}
       cursor={singlePostView ? 'unset' : 'pointer'}
       _hover={{ borderColor: singlePostView ? 'none' : 'gray.500' }}
-      onClick={() => onSelectPost && post && onSelectPost(post, postIdx!)}>
+      onClick={() => onSelectPost && onSelectPost(post)}>
       <Flex
         direction='column'
         align='center'

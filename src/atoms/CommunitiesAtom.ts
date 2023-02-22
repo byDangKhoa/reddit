@@ -17,18 +17,8 @@ export interface CommunitySnippet {
 }
 
 interface CommunityState {
-  [key: string]:
-    | CommunitySnippet[]
-    | { [key: string]: Community }
-    | Community
-    | boolean
-    | undefined
   mySnippets: CommunitySnippet[]
-  initSnippetsFetched: boolean
-  visitedCommunities: {
-    [key: string]: Community
-  }
-  currentCommunity: Community
+  currentCommunity?: Community
 }
 
 export const defaultCommunity: Community = {
@@ -36,12 +26,11 @@ export const defaultCommunity: Community = {
   creatorId: '',
   numberOfMembers: 0,
   privacyType: 'public',
+  imageURL: '',
 }
 
 export const defaultCommunityState: CommunityState = {
   mySnippets: [],
-  initSnippetsFetched: false,
-  visitedCommunities: {},
   currentCommunity: defaultCommunity,
 }
 

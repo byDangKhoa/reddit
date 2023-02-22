@@ -19,6 +19,7 @@ import { Community } from '@/atoms/CommunitiesAtom'
 import { Post } from '@/atoms/PostAtom'
 import usePosts from '@/hook/usePost'
 import PostItem from './PostForm/PostItem'
+import PostLoader from './PostForm/PostLoader'
 
 type PostsProps = {
   communityData?: Community
@@ -46,19 +47,19 @@ const Posts = ({ communityData, userId, loadingUser }: PostsProps) => {
     router.push(`/r/${communityData?.id!}/comments/${post.id}`)
   }
   useEffect(() => {
-    if (
-      postStateValue.postsCache[communityData?.id!] &&
-      !postStateValue.postUpdateRequired
-    ) {
-      setPostStateValue((prev) => ({
-        ...prev,
-        posts: postStateValue.postsCache[communityData?.id!],
-      }))
-      return
-    }
+    // if (
+    //   postStateValue.postsCache[communityData?.id!] &&
+    //   !postStateValue.postUpdateRequired
+    // ) {
+    //   setPostStateValue((prev) => ({
+    //     ...prev,
+    //     posts: postStateValue.postsCache[communityData?.id!],
+    //   }))
+    //   return
+    // }
 
     getPosts()
-  }, [communityData, postStateValue.postUpdateRequired])
+  }, [communityData])
 
   const getPosts = async () => {
     console.log('WE ARE GETTING POSTS!!!')
@@ -72,7 +73,7 @@ const Posts = ({ communityData, userId, loadingUser }: PostsProps) => {
       )
       const postDocs = await getDocs(postsQuery)
       const posts = postDocs.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      console.log('postdata', posts)
+
       setPostStateValue((prev) => ({
         ...prev,
         posts: posts as Post[],
@@ -92,23 +93,27 @@ const Posts = ({ communityData, userId, loadingUser }: PostsProps) => {
 
   return (
     <>
-      <Stack>
-        {postStateValue.posts.map((post: Post, index) => (
-          <PostItem
-            key={post.id}
-            post={post}
-            // postIdx={index}
-            onVote={onVote}
-            onDeletePost={onDeletePost}
-            userVoteValue={
-              postStateValue.postVotes.find((item) => item.postId === post.id)
-                ?.voteValue
-            }
-            userIsCreator={userId === post.creatorId}
-            onSelectPost={onSelectPost}
-          />
-        ))}
-      </Stack>
+      {loading ? (
+        <PostLoader />
+      ) : (
+        <Stack>
+          {postStateValue.posts.map((post: Post, index) => (
+            <PostItem
+              key={post.id}
+              post={post}
+              // postIdx={index}
+              onVote={onVote}
+              onDeletePost={onDeletePost}
+              userVoteValue={
+                postStateValue.postVotes.find((item) => item.postId === post.id)
+                  ?.voteValue
+              }
+              userIsCreator={userId === post.creatorId}
+              onSelectPost={onSelectPost}
+            />
+          ))}
+        </Stack>
+      )}
     </>
   )
 }

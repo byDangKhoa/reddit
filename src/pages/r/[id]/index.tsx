@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { doc, getDoc } from 'firebase/firestore'
 import type { GetServerSidePropsContext } from 'next'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { auth, firestore } from '../../../firebase/clientApp'
 import { Community, communityState } from '@/atoms/CommunitiesAtom'
@@ -14,6 +14,7 @@ import PageContent from '@/components/Layout/PageContent'
 import CreatePostLink from '@/components/Community/CreatePostLink'
 import CommunityNotFound from '@/components/Community/CommunityNotFound'
 import Posts from '@/components/Posts/Post'
+import About from '@/components/Community/About'
 
 interface CommunityPageProps {
   communityData: Community
@@ -22,8 +23,7 @@ interface CommunityPageProps {
 const CommunityPage = ({ communityData }: CommunityPageProps) => {
   const [user, loadingUser] = useAuthState(auth)
 
-  const [communityStateValue, setCommunityStateValue] =
-    useRecoilState(communityState)
+  const setCommunityStateValue = useSetRecoilState(communityState)
 
   useEffect(() => {
     setCommunityStateValue((prev) => ({
@@ -51,8 +51,7 @@ const CommunityPage = ({ communityData }: CommunityPageProps) => {
         </>
 
         <>
-          {/* <About communityData={communityData} /> */}
-          <div>RHS</div>
+          <About communityData={communityData} />
         </>
       </PageContent>
     </>
