@@ -9,6 +9,7 @@ import { auth } from '../../../firebase/clientApp'
 
 import CreateCommunityModal from '@/components/Modal/CreateCommunityModal'
 import { communityState } from '@/atoms/CommunitiesAtom'
+import MenuListItem from './MenuListItem'
 
 type CommunitiesProps = {
   menuOpen: boolean
@@ -27,27 +28,23 @@ const Communities = ({ menuOpen }: CommunitiesProps) => {
         handleClose={() => setOpen(false)}
         userId={user?.uid!}
       />
-      {/* COULD DO THIS FOR CLEANER COMPONENTS */}
-      {/* <Moderating snippets={snippetState.filter((item) => item.isModerator)} />
-      <MyCommunities snippets={snippetState} setOpen={setOpen} /> */}
-      {/* {mySnippets.find((item) => item.isModerator) && (
-        <Box mt={3} mb={4}>
-          <Text pl={3} mb={1} fontSize='7pt' fontWeight={500} color='gray.500'>
-            MODERATING
-          </Text>
-          {mySnippets
-            .filter((item) => item.isModerator)
-            .map((snippet) => (
-              <MenuListItem
-                key={snippet.communityId}
-                displayText={`r/${snippet.communityId}`}
-                link={`/r/${snippet.communityId}`}
-                icon={FaReddit}
-                iconColor='brand.100'
-              />
-            ))}
-        </Box>
-      )} */}
+      <Box mt={3} mb={4}>
+        <Text pl={3} mb={1} fontSize='7pt' fontWeight={500} color='gray.500'>
+          MODERATOR
+        </Text>
+        {mySnippets
+          .filter((snipet) => snipet.isModerator)
+          .map((snippet) => (
+            <MenuListItem
+              key={snippet.communityId}
+              icon={FaReddit}
+              displayText={`r/${snippet.communityId}`}
+              link={`/r/${snippet.communityId}`}
+              iconColor='blue.500'
+              imageURL={snippet.imageURL}
+            />
+          ))}
+      </Box>
       <Box mt={3} mb={4}>
         <Text pl={3} mb={1} fontSize='7pt' fontWeight={500} color='gray.500'>
           MY COMMUNITIES
@@ -62,16 +59,18 @@ const Communities = ({ menuOpen }: CommunitiesProps) => {
             Create Community
           </Flex>
         </MenuItem>
-        {/* {mySnippets.map((snippet) => (
-          <MenuListItem
-            key={snippet.communityId}
-            icon={FaReddit}
-            displayText={`r/${snippet.communityId}`}
-            link={`/r/${snippet.communityId}`}
-            iconColor='blue.500'
-            imageURL={snippet.imageURL}
-          />
-        ))} */}
+        {mySnippets
+          .filter((snipet) => !snipet.isModerator)
+          .map((snippet) => (
+            <MenuListItem
+              key={snippet.communityId}
+              icon={FaReddit}
+              displayText={`r/${snippet.communityId}`}
+              link={`/r/${snippet.communityId}`}
+              iconColor='blue.500'
+              imageURL={snippet.imageURL}
+            />
+          ))}
       </Box>
     </>
   )

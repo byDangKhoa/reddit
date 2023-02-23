@@ -109,9 +109,6 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
 
     try {
       const postDocRef = await addDoc(collection(firestore, 'posts'), body)
-
-      console.log('HERE IS NEW POST ID', postDocRef.id)
-
       // // check if selectedFile exists, if it does, do image processing
       if (selectedFile) {
         const imageRef = ref(storage, `posts/${postDocRef.id}/image`)
@@ -120,7 +117,6 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
         await updateDoc(postDocRef, {
           imageURL: downloadURL,
         })
-        console.log('HERE IS DOWNLOAD URL', downloadURL)
       }
 
       // Clear the cache to cause a refetch of the posts
@@ -130,7 +126,6 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
       //   }))
       router.push(`/r/${router.query.id}`)
     } catch (error) {
-      console.log('createPost error', error)
       setError('Error creating post')
     }
     setLoading(false)

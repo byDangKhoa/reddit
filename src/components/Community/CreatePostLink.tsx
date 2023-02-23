@@ -1,5 +1,6 @@
 import { authModalState } from '@/atoms/AuthModalAtom'
 import { auth } from '@/firebase/clientApp'
+import useDirectory from '@/hook/useDirectory'
 import { Flex, Icon, Input } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -14,13 +15,18 @@ const CreatePostLink = () => {
   const router = useRouter()
   const setAuthmodalState = useSetRecoilState(authModalState)
   const [user] = useAuthState(auth)
+  const { toggleMenuOpen } = useDirectory()
   function onClick() {
     if (!user) {
       setAuthmodalState((prev) => ({ ...prev, type: 'login' }))
       return
     }
     const { id } = router.query
-    router.push(`/r/${id}/submit`)
+    if (id) {
+      router.push(`/r/${id}/submit`)
+      return
+    }
+    toggleMenuOpen()
   }
 
   return (

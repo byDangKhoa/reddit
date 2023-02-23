@@ -12,11 +12,12 @@ import usePosts from '@/hook/usePost'
 import { Post } from '@/atoms/PostAtom'
 import PostLoader from '@/components/Posts/PostForm/PostLoader'
 import PostItem from '@/components/Posts/PostForm/PostItem'
+import Comments from '@/components/Posts/Comments/Comments'
 
 const PostPage = () => {
   const [user] = useAuthState(auth)
   const router = useRouter()
-  const { pid } = router.query
+  const { id, pid } = router.query
   const { communityStateValue } = useCommunityData()
 
   // Need to pass community data here to see if current post [pid] has been voted on
@@ -30,8 +31,6 @@ const PostPage = () => {
   } = usePosts(communityStateValue.currentCommunity)
 
   const fetchPost = async () => {
-    console.log('FETCHING POST')
-
     setLoading(true)
     try {
       const postDocRef = doc(firestore, 'posts', pid as string)
@@ -41,7 +40,7 @@ const PostPage = () => {
         selectedPost: { id: postDoc.id, ...postDoc.data() } as Post,
       }))
     } catch (error: any) {
-      console.log('fetchPost error', error.message)
+      console.error('fetchPost error', error.message)
     }
     setLoading(false)
   }
@@ -79,11 +78,11 @@ const PostPage = () => {
                   }
                   router={router}
                 />
-                {/* <Comments
+                <Comments
                   user={user}
-                  community={community as string}
+                  communityId={id as string}
                   selectedPost={postStateValue.selectedPost}
-                /> */}
+                />
               </>
             )}
           </>

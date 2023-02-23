@@ -29,8 +29,6 @@ const usePosts = (communityData?: Community) => {
   const communityStateValue = useRecoilValue(communityState)
 
   const onSelectPost = (post: Post) => {
-    console.log('HERE IS STUFF', post)
-
     setPostStateValue((prev) => ({
       ...prev,
       selectedPost: post,
@@ -54,7 +52,6 @@ const usePosts = (communityData?: Community) => {
     const existingVote = postStateValue.postVotes.find(
       (vote) => vote.postId === post.id
     )
-    console.log('existing vote', existingVote)
     // is this an upvote or a downvote?
     // has this user voted on this post already? was it up or down?
 
@@ -78,8 +75,6 @@ const usePosts = (communityData?: Community) => {
           communityId,
           voteValue: vote,
         }
-
-        console.log('NEW VOTE!!!', newVote)
 
         // APRIL 25 - DON'T THINK WE NEED THIS
         // newVote.id = postVoteRef.id;
@@ -113,7 +108,6 @@ const usePosts = (communityData?: Community) => {
           const voteIdx = postStateValue.postVotes.findIndex(
             (vote) => vote.id === existingVote.id
           )
-          // console.log("HERE IS VOTE INDEX", voteIdx);
 
           // Vote was found - findIndex returns -1 if not found
 
@@ -128,37 +122,6 @@ const usePosts = (communityData?: Community) => {
           voteChange = 2 * vote
         }
       }
-
-      // let updatedState = { ...postStateValue, postVotes: updatedPostVotes }
-
-      // const postIdx = postStateValue.posts.findIndex(
-      //   (item) => item.id === post.id
-      // )
-
-      // if (postIdx !== undefined) {
-      // updatedPosts[postIdx!] = updatedPost
-      // updatedState = {
-      //   ...updatedState,
-      //   posts: updatedPosts,
-      //   postsCache: {
-      //     ...updatedState.postsCache,
-      //     [communityId]: updatedPosts,
-      //   },
-      // }
-      // }
-
-      /**
-       * Optimistically update the UI
-       * Used for single page view [pid]
-       * since we don't have real-time listener there
-       */
-      // if (updatedState.selectedPost) {
-      //   updatedState = {
-      //     ...updatedState,
-      //     selectedPost: updatedPost,
-      //   }
-      // }
-      // setPostStateValue(updatedState)
       if (postStateValue.selectedPost) {
         setPostStateValue((prev) => ({
           ...prev,
@@ -179,13 +142,11 @@ const usePosts = (communityData?: Community) => {
       batch.update(postRef, { voteStatus: voteStatus + voteChange })
       await batch.commit()
     } catch (error) {
-      console.log('onVote error', error)
+      console.error('onVote error', error)
     }
   }
 
   const onDeletePost = async (post: Post): Promise<boolean> => {
-    console.log('DELETING POST: ', post.id)
-
     try {
       // del img from storage
       if (post.imageURL) {
@@ -215,7 +176,7 @@ const usePosts = (communityData?: Community) => {
        */
       return true
     } catch (error) {
-      console.log('THERE WAS AN ERROR', error)
+      console.error('THERE WAS AN ERROR', error)
       return false
     }
   }

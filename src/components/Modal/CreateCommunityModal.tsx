@@ -95,7 +95,7 @@ const CreateCommunityModal = ({
         handleClose()
       })
     } catch (error: any) {
-      console.log('Transaction error', error)
+      console.error('Transaction error', error)
       setNameError(error.message)
     }
     // setSnippetState((prev) => ({

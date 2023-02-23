@@ -61,8 +61,6 @@ const Posts = ({ communityData, userId, loadingUser }: PostsProps) => {
   }, [communityData])
 
   const getPosts = async () => {
-    console.log('WE ARE GETTING POSTS!!!')
-
     setLoading(true)
     try {
       const postsQuery = query(
@@ -83,13 +81,11 @@ const Posts = ({ communityData, userId, loadingUser }: PostsProps) => {
         postUpdateRequired: false,
       }))
     } catch (error: any) {
-      console.log('getPosts error', error.message)
+      console.error('getPosts error', error.message)
     }
 
     setLoading(false)
   }
-
-  console.log('HERE IS POST STATE', postStateValue)
 
   return (
     <>

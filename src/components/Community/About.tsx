@@ -60,7 +60,7 @@ const About = ({ communityData, loading, pt, onCreatePage }: AboutProps) => {
         } as Community,
       }))
     } catch (error: any) {
-      console.log('updateImage error', error.message)
+      console.error('updateImage error', error.message)
     }
     // April 24 - removed reload
     // window.location.reload();

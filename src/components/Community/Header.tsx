@@ -18,7 +18,6 @@ const Header: React.FC<HeaderProps> = ({ communityData }) => {
    */
   const { communityStateValue, loading, error, onJoinLeaveCommunity } =
     useCommunityData(!!communityData)
-  console.log('communityStateValue', communityStateValue)
   const isJoined = !!communityStateValue.mySnippets.find(
     (item) => item.communityId === communityData.id
   )
