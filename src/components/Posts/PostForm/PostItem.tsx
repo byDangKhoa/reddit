@@ -75,7 +75,9 @@ const PostItem = ({
         isClosable: true,
       })
 
-      router.push(`/r/${router.query.id}`)
+      if (singlePostView) {
+        router.push(`/r/${post.communityId}`)
+      }
     } catch (error: any) {
       toast({
         title: 'Post',

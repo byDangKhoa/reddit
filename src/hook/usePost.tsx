@@ -43,7 +43,6 @@ const usePosts = (communityData?: Community) => {
     post: Post,
     vote: number,
     communityId: string
-    // postIdx?: number
   ) => {
     event.stopPropagation()
     if (!user?.uid) {
@@ -52,21 +51,20 @@ const usePosts = (communityData?: Community) => {
     }
 
     const { voteStatus } = post
-    // const existingVote = post.currentUserVoteStatus;
     const existingVote = postStateValue.postVotes.find(
       (vote) => vote.postId === post.id
     )
-
+    console.log('existing vote', existingVote)
     // is this an upvote or a downvote?
     // has this user voted on this post already? was it up or down?
 
     try {
-      let voteChange = vote
       const batch = writeBatch(firestore)
 
       const updatedPost = { ...post }
       const updatedPosts = [...postStateValue.posts]
       let updatedPostVotes = [...postStateValue.postVotes]
+      let voteChange = vote
 
       // New vote
       if (!existingVote) {
@@ -102,16 +100,15 @@ const usePosts = (communityData?: Community) => {
 
         // Removing vote
         if (existingVote.voteValue === vote) {
-          voteChange *= -1
           updatedPost.voteStatus = voteStatus - vote
           updatedPostVotes = updatedPostVotes.filter(
             (vote) => vote.id !== existingVote.id
           )
           batch.delete(postVoteRef)
+          voteChange *= -1
         }
         // Changing vote
         else {
-          voteChange = 2 * vote
           updatedPost.voteStatus = voteStatus + 2 * vote
           const voteIdx = postStateValue.postVotes.findIndex(
             (vote) => vote.id === existingVote.id
@@ -119,34 +116,35 @@ const usePosts = (communityData?: Community) => {
           // console.log("HERE IS VOTE INDEX", voteIdx);
 
           // Vote was found - findIndex returns -1 if not found
-          if (voteIdx !== -1) {
-            updatedPostVotes[voteIdx] = {
-              ...existingVote,
-              voteValue: vote,
-            }
+
+          updatedPostVotes[voteIdx] = {
+            ...existingVote,
+            voteValue: vote,
           }
+
           batch.update(postVoteRef, {
             voteValue: vote,
           })
+          voteChange = 2 * vote
         }
       }
 
-      let updatedState = { ...postStateValue, postVotes: updatedPostVotes }
+      // let updatedState = { ...postStateValue, postVotes: updatedPostVotes }
 
-      const postIdx = postStateValue.posts.findIndex(
-        (item) => item.id === post.id
-      )
+      // const postIdx = postStateValue.posts.findIndex(
+      //   (item) => item.id === post.id
+      // )
 
       // if (postIdx !== undefined) {
-      updatedPosts[postIdx!] = updatedPost
-      updatedState = {
-        ...updatedState,
-        posts: updatedPosts,
-        postsCache: {
-          ...updatedState.postsCache,
-          [communityId]: updatedPosts,
-        },
-      }
+      // updatedPosts[postIdx!] = updatedPost
+      // updatedState = {
+      //   ...updatedState,
+      //   posts: updatedPosts,
+      //   postsCache: {
+      //     ...updatedState.postsCache,
+      //     [communityId]: updatedPosts,
+      //   },
+      // }
       // }
 
       /**
@@ -167,6 +165,15 @@ const usePosts = (communityData?: Community) => {
           selectedPost: updatedPost,
         }))
       }
+      const postIdx = postStateValue.posts.findIndex(
+        (item) => item.id === post.id
+      )
+      updatedPosts[postIdx] = updatedPost
+      setPostStateValue((prev) => ({
+        ...prev,
+        posts: updatedPosts,
+        postVotes: updatedPostVotes,
+      }))
       // Update database
       const postRef = doc(firestore, 'posts', post.id)
       batch.update(postRef, { voteStatus: voteStatus + voteChange })

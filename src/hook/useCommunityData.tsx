@@ -46,11 +46,7 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
     console.log('GETTING COMMUNITY DATA')
 
     try {
-      const communityDocRef = doc(
-        firestore,
-        'communities',
-        communityId as string
-      )
+      const communityDocRef = doc(firestore, 'communities', communityId)
       const communityDoc = await getDoc(communityDocRef)
 
       setCommunityStateValue((prev) => ({

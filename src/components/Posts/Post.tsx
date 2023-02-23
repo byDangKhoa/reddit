@@ -32,17 +32,16 @@ const Posts = ({ communityData, userId, loadingUser }: PostsProps) => {
    * PART OF INITIAL SOLUTION BEFORE CUSTOM HOOK
    */
   const [loading, setLoading] = useState(false)
-  // const setAuthModalState = useSetRecoilState(authModalState);
   const router = useRouter()
 
   const { postStateValue, setPostStateValue, onVote, onDeletePost } = usePosts(
     communityData!
   )
 
-  const onSelectPost = (post: Post, postIdx: number) => {
+  const onSelectPost = (post: Post) => {
     setPostStateValue((prev) => ({
       ...prev,
-      selectedPost: { ...post, postIdx },
+      selectedPost: post,
     }))
     router.push(`/r/${communityData?.id!}/comments/${post.id}`)
   }
@@ -86,10 +85,11 @@ const Posts = ({ communityData, userId, loadingUser }: PostsProps) => {
     } catch (error: any) {
       console.log('getPosts error', error.message)
     }
+
     setLoading(false)
   }
 
-  //   console.log('HERE IS POST STATE', postStateValue)
+  console.log('HERE IS POST STATE', postStateValue)
 
   return (
     <>
@@ -97,11 +97,10 @@ const Posts = ({ communityData, userId, loadingUser }: PostsProps) => {
         <PostLoader />
       ) : (
         <Stack>
-          {postStateValue.posts.map((post: Post, index) => (
+          {postStateValue.posts.map((post: Post) => (
             <PostItem
               key={post.id}
               post={post}
-              // postIdx={index}
               onVote={onVote}
               onDeletePost={onDeletePost}
               userVoteValue={

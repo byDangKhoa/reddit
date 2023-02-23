@@ -17,7 +17,6 @@ const PostPage = () => {
   const [user] = useAuthState(auth)
   const router = useRouter()
   const { pid } = router.query
-  const community = router.query.id
   const { communityStateValue } = useCommunityData()
 
   // Need to pass community data here to see if current post [pid] has been voted on
@@ -68,7 +67,6 @@ const PostPage = () => {
               <>
                 <PostItem
                   post={postStateValue.selectedPost}
-                  // postIdx={postStateValue.selectedPost.postIdx}
                   onVote={onVote}
                   onDeletePost={onDeletePost}
                   userVoteValue={
