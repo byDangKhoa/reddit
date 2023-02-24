@@ -32,6 +32,7 @@ import { useSetRecoilState } from 'recoil'
 import { auth, firestore } from '@/firebase/clientApp'
 import { communityState } from '@/atoms/CommunitiesAtom'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import useDirectory from '@/hook/useDirectory'
 
 type CreateCommunityModalProps = {
   isOpen: boolean
@@ -50,7 +51,9 @@ const CreateCommunityModal = ({
   const [nameError, setNameError] = useState('')
   const [communityType, setCommunityType] = useState('public')
   const [loading, setLoading] = useState(false)
+  const { toggleMenuOpen } = useDirectory()
 
+  const router = useRouter()
   //Check char length create community
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > 21) return
@@ -92,7 +95,6 @@ const CreateCommunityModal = ({
             isModerator: true,
           }
         )
-        handleClose()
       })
     } catch (error: any) {
       console.error('Transaction error', error)
@@ -102,8 +104,9 @@ const CreateCommunityModal = ({
     //   ...prev,
     //   mySnippets: [],
     // }))
-
-    // router.push(`r/${name}`)
+    toggleMenuOpen()
+    handleClose()
+    router.push(`r/${name}`)
     setLoading(false)
   }
 

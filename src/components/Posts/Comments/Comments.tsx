@@ -103,7 +103,7 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
         postUpdateRequired: true,
       }))
     } catch (error: any) {
-      console.log('onCreateComment error', error.message)
+      console.error('onCreateComment error', error.message)
     }
     setCommentCreateLoading(false)
   }
@@ -135,7 +135,7 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
         setComments((prev) => prev.filter((item) => item.id !== comment.id))
         // return true;
       } catch (error: any) {
-        console.log('Error deletig comment', error.message)
+        console.error('Error deletig comment', error.message)
         // return false;
       }
       setDeleteLoading('')
@@ -157,14 +157,12 @@ const Comments = ({ user, selectedPost, communityId }: CommentsProps) => {
       }))
       setComments(comments as Comment[])
     } catch (error: any) {
-      console.log('getPostComments error', error.message)
+      console.error('getPostComments error', error.message)
     }
     setCommentFetchLoading(false)
   }
 
   useEffect(() => {
-    console.log('HERE IS SELECTED POST', selectedPost.id)
-
     getPostComments()
   }, [])
 

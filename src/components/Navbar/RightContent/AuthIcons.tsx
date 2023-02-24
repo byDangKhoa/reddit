@@ -1,6 +1,5 @@
-import React from 'react'
-import { AddIcon } from '@chakra-ui/icons'
-import { Box, Flex, Icon } from '@chakra-ui/react'
+import useDirectory from '@/hook/useDirectory'
+import { Box, Flex, Icon, Tooltip } from '@chakra-ui/react'
 import { BsArrowUpRightCircle, BsChatDots } from 'react-icons/bs'
 import { GrAdd } from 'react-icons/gr'
 import {
@@ -9,12 +8,8 @@ import {
   IoVideocamOutline,
 } from 'react-icons/io5'
 
-// import useDirectory from '../../../hooks/useDirectory'
-
-type ActionIconsProps = {}
-
 const ActionIcons = () => {
-  //   const { toggleMenuOpen } = useDirectory()
+  const { toggleMenuOpen } = useDirectory()
   return (
     <Flex alignItems='center' flexGrow={1}>
       <Box
@@ -22,65 +17,84 @@ const ActionIcons = () => {
         alignItems='center'
         borderRight='1px solid'
         borderColor='gray.200'>
-        <Flex
-          mr={1.5}
-          ml={1.5}
-          padding={1}
-          cursor='pointer'
-          borderRadius={4}
-          _hover={{ bg: 'gray.200' }}>
-          <Icon as={BsArrowUpRightCircle} fontSize={20} />
-        </Flex>
-        <Flex
-          mr={1.5}
-          ml={1.5}
-          padding={1}
-          cursor='pointer'
-          borderRadius={4}
-          _hover={{ bg: 'gray.200' }}>
-          <Icon as={IoFilterCircleOutline} fontSize={22} />
-        </Flex>
-        <Flex
-          mr={1.5}
-          ml={1.5}
-          padding={1}
-          cursor='pointer'
-          borderRadius={4}
-          _hover={{ bg: 'gray.200' }}>
-          <Icon as={IoVideocamOutline} fontSize={22} />
-        </Flex>
+        <Tooltip fontSize='8pt' label='WIP' color='red.500' bg='white'>
+          <Flex
+            mr={1.5}
+            ml={1.5}
+            padding={1}
+            cursor='pointer'
+            borderRadius={4}
+            _hover={{ bg: 'gray.200' }}>
+            <Icon as={BsArrowUpRightCircle} fontSize={20} />
+          </Flex>
+        </Tooltip>
+
+        <Tooltip fontSize='8pt' label='WIP' color='red.500' bg='white'>
+          <Flex
+            mr={1.5}
+            ml={1.5}
+            padding={1}
+            cursor='pointer'
+            borderRadius={4}
+            _hover={{ bg: 'gray.200' }}>
+            <Icon as={IoFilterCircleOutline} fontSize={22} />
+          </Flex>
+        </Tooltip>
+
+        <Tooltip fontSize='8pt' label='WIP' color='red.500' bg='white'>
+          <Flex
+            mr={1.5}
+            ml={1.5}
+            padding={1}
+            cursor='pointer'
+            borderRadius={4}
+            _hover={{ bg: 'gray.200' }}>
+            <Icon as={IoVideocamOutline} fontSize={22} />
+          </Flex>
+        </Tooltip>
       </Box>
       <>
-        <Flex
-          mr={1.5}
-          ml={1.5}
-          padding={1}
-          cursor='pointer'
-          borderRadius={4}
-          _hover={{ bg: 'gray.200' }}>
-          <Icon as={BsChatDots} fontSize={20} />
-        </Flex>
-        <Flex
-          mr={1.5}
-          ml={1.5}
-          padding={1}
-          cursor='pointer'
-          borderRadius={4}
-          _hover={{ bg: 'gray.200' }}>
-          <Icon as={IoNotificationsOutline} fontSize={20} />
-        </Flex>
-        <Flex
-          display={{ base: 'none', md: 'flex' }}
-          mr={3}
-          ml={1.5}
-          padding={1}
-          cursor='pointer'
-          borderRadius={4}
-          _hover={{ bg: 'gray.200' }}
-          //   onClick={toggleMenuOpen}
-        >
-          <Icon as={GrAdd} fontSize={20} />
-        </Flex>
+        <Tooltip fontSize='8pt' label='WIP' color='red.500' bg='white'>
+          <Flex
+            mr={1.5}
+            ml={1.5}
+            padding={1}
+            cursor='pointer'
+            borderRadius={4}
+            _hover={{ bg: 'gray.200' }}>
+            <Icon as={BsChatDots} fontSize={20} />
+          </Flex>
+        </Tooltip>
+
+        <Tooltip fontSize='8pt' label='WIP' color='red.500' bg='white'>
+          <Flex
+            mr={1.5}
+            ml={1.5}
+            padding={1}
+            cursor='pointer'
+            borderRadius={4}
+            _hover={{ bg: 'gray.200' }}>
+            <Icon as={IoNotificationsOutline} fontSize={20} />
+          </Flex>
+        </Tooltip>
+
+        <Tooltip
+          fontSize='8pt'
+          label='Create Community'
+          color='gray.500'
+          bg='white'>
+          <Flex
+            display={{ base: 'none', md: 'flex' }}
+            mr={3}
+            ml={1.5}
+            padding={1}
+            cursor='pointer'
+            borderRadius={4}
+            _hover={{ bg: 'gray.200' }}
+            onClick={toggleMenuOpen}>
+            <Icon as={GrAdd} fontSize={20} />
+          </Flex>
+        </Tooltip>
       </>
     </Flex>
   )

@@ -124,7 +124,7 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
       //     ...prev,
       //     postUpdateRequired: true,
       //   }))
-      router.push(`/r/${router.query.id}`)
+      router.push(`/r/${communityId}/comments/${postDocRef.id}`)
     } catch (error) {
       setError('Error creating post')
     }

@@ -7,6 +7,7 @@ import {
   Spinner,
   Stack,
   Text,
+  Tooltip,
   useToast,
 } from '@chakra-ui/react'
 import { formatDistanceToNow } from 'date-fns'
@@ -196,24 +197,30 @@ const PostItem = ({
             <Icon as={BsChat} mr={2} />
             <Text fontSize='9pt'>{post.numberOfComments}</Text>
           </Flex>
-          <Flex
-            align='center'
-            p='8px 10px'
-            borderRadius={4}
-            _hover={{ bg: 'gray.200' }}
-            cursor='pointer'>
-            <Icon as={IoArrowRedoOutline} mr={2} />
-            <Text fontSize='9pt'>Share</Text>
-          </Flex>
-          <Flex
-            align='center'
-            p='8px 10px'
-            borderRadius={4}
-            _hover={{ bg: 'gray.200' }}
-            cursor='pointer'>
-            <Icon as={IoBookmarkOutline} mr={2} />
-            <Text fontSize='9pt'>Save</Text>
-          </Flex>
+          <Tooltip fontSize='8pt' label='WIP' color='red.500' bg='white'>
+            <Flex
+              align='center'
+              p='8px 10px'
+              borderRadius={4}
+              _hover={{ bg: 'gray.200' }}
+              cursor='pointer'>
+              <Icon as={IoArrowRedoOutline} mr={2} />
+              <Text fontSize='9pt'>Share</Text>
+            </Flex>
+          </Tooltip>
+
+          <Tooltip fontSize='8pt' label='WIP' color='red.500' bg='white'>
+            <Flex
+              align='center'
+              p='8px 10px'
+              borderRadius={4}
+              _hover={{ bg: 'gray.200' }}
+              cursor='pointer'>
+              <Icon as={IoBookmarkOutline} mr={2} />
+              <Text fontSize='9pt'>Save</Text>
+            </Flex>
+          </Tooltip>
+
           {userIsCreator && (
             <Flex
               align='center'

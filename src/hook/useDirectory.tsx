@@ -31,7 +31,7 @@ const useDirectory = () => {
   const toggleMenuOpen = () => {
     setDirectoryState((prev) => ({
       ...prev,
-      isOpen: !directoryState.isOpen,
+      isOpen: !prev.isOpen,
     }))
   }
 

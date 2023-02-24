@@ -31,6 +31,7 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
       setCommunityStateValue((prev) => ({
         ...prev,
         mySnippets: snippets as CommunitySnippet[],
+        snippetsFetched: true,
       }))
       setLoading(false)
     } catch (error: any) {
@@ -135,7 +136,14 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
     setLoading(false)
   }
   useEffect(() => {
-    if (!user || !!communityStateValue.mySnippets.length) return
+    if (!user) {
+      setCommunityStateValue((prev) => ({
+        ...prev,
+        mySnippets: [],
+        snippetsFetched: false,
+      }))
+      return
+    }
 
     getSnippets()
   }, [user])

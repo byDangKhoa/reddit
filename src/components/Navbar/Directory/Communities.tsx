@@ -10,6 +10,7 @@ import { auth } from '../../../firebase/clientApp'
 import CreateCommunityModal from '@/components/Modal/CreateCommunityModal'
 import { communityState } from '@/atoms/CommunitiesAtom'
 import MenuListItem from './MenuListItem'
+import useDirectory from '@/hook/useDirectory'
 
 type CommunitiesProps = {
   menuOpen: boolean
@@ -19,6 +20,7 @@ const Communities = ({ menuOpen }: CommunitiesProps) => {
   const [user] = useAuthState(auth)
 
   const [open, setOpen] = useState(false)
+
   const mySnippets = useRecoilValue(communityState).mySnippets
 
   return (

@@ -23,6 +23,10 @@ import PostLoader from '@/components/Posts/PostForm/PostLoader'
 import { auth, firestore } from '@/firebase/clientApp'
 import usePosts from '@/hook/usePost'
 import PageContent from '@/components/Layout/PageContent'
+import useCommunityData from '@/hook/useCommunityData'
+import Recommendations from '@/components/Community/Recommendations'
+import Premium from '@/components/Community/Premium'
+import PersonalHome from '@/components/Community/PersonalHome'
 
 const Home: NextPage = () => {
   const [user, loadingUser] = useAuthState(auth)
@@ -35,10 +39,9 @@ const Home: NextPage = () => {
     loading,
     setLoading,
   } = usePosts()
-  const communityStateValue = useRecoilValue(communityState)
+  const { communityStateValue } = useCommunityData()
 
   const getUserHomePosts = async () => {
-    console.log('GETTING USER FEED')
     setLoading(true)
     try {
       /**
@@ -49,8 +52,6 @@ const Home: NextPage = () => {
 
       // User has joined communities
       if (communityStateValue.mySnippets.length) {
-        console.log('GETTING POSTS IN USER COMMUNITIES')
-
         const myCommunityIds = communityStateValue.mySnippets.map(
           (snippet) => snippet.communityId
         )
@@ -84,8 +85,6 @@ const Home: NextPage = () => {
       }
       // User has not joined any communities yet
       else {
-        console.log('USER HAS NO COMMUNITIES - GETTING GENERAL POSTS')
-
         const postQuery = query(
           collection(firestore, 'posts'),
           orderBy('voteStatus', 'desc'),
@@ -99,8 +98,6 @@ const Home: NextPage = () => {
         feedPosts.push(...posts)
       }
 
-      console.log('HERE ARE FEED POSTS', feedPosts)
-
       setPostStateValue((prev) => ({
         ...prev,
         posts: feedPosts,
@@ -109,13 +106,12 @@ const Home: NextPage = () => {
       // if not in any, get 5 communities ordered by number of members
       // for each one, get 2 posts ordered by voteStatus and set these to postState posts
     } catch (error: any) {
-      console.log('getUserHomePosts error', error.message)
+      console.error('getUserHomePosts error', error.message)
     }
     setLoading(false)
   }
 
   const getNoUserHomePosts = async () => {
-    console.log('GETTING NO USER FEED')
     setLoading(true)
     try {
       const postQuery = query(
@@ -128,14 +124,13 @@ const Home: NextPage = () => {
         id: doc.id,
         ...doc.data(),
       }))
-      console.log('NO USER FEED', posts)
 
       setPostStateValue((prev) => ({
         ...prev,
         posts: posts as Post[],
       }))
     } catch (error: any) {
-      console.log('getNoUserHomePosts error', error.message)
+      console.error('getNoUserHomePosts error', error.message)
     }
     setLoading(false)
   }
@@ -162,17 +157,10 @@ const Home: NextPage = () => {
   }
 
   useEffect(() => {
-    /**
-     * initSnippetsFetched ensures that user snippets have been retrieved;
-     * the value is set to true when snippets are first retrieved inside
-     * of getSnippets in useCommunityData
-     */
-    // if (!communityStateValue.initSnippetsFetched) return
-
-    if (user) {
+    if (communityStateValue.snippetsFetched) {
       getUserHomePosts()
     }
-  }, [user])
+  }, [communityStateValue.snippetsFetched])
 
   useEffect(() => {
     if (!user && !loadingUser) {
@@ -181,7 +169,7 @@ const Home: NextPage = () => {
   }, [user, loadingUser])
 
   useEffect(() => {
-    if (!user?.uid || !postStateValue.posts.length) return
+    if (!user || !postStateValue.posts.length) return
     getUserPostVotes()
 
     // Clear postVotes on dismount
@@ -191,7 +179,7 @@ const Home: NextPage = () => {
         postVotes: [],
       }))
     }
-  }, [postStateValue.posts, user?.uid])
+  }, [postStateValue.posts, user])
 
   return (
     <PageContent>
@@ -222,9 +210,9 @@ const Home: NextPage = () => {
         )}
       </>
       <Stack spacing={5} position='sticky' top='14px'>
-        {/* <Recommendations />
+        <Recommendations />
         <Premium />
-        <PersonalHome /> */}
+        <PersonalHome />
       </Stack>
     </PageContent>
   )

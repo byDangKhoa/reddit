@@ -61,8 +61,6 @@ const CommunityPage = ({ communityData }: CommunityPageProps) => {
 export default CommunityPage
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  console.log('GET SERVER SIDE PROPS RUNNING', context)
-
   try {
     const communityDocRef = doc(
       firestore,
