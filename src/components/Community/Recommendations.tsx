@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { FaReddit } from 'react-icons/fa'
 
@@ -21,6 +22,7 @@ const Recommendations = () => {
   const [communities, setCommunities] = useState<Community[]>([])
   const [loading, setLoading] = useState(false)
   const { communityStateValue, onJoinLeaveCommunity } = useCommunityData()
+  const router = useRouter()
 
   const getCommunityRecommendations = async () => {
     setLoading(true)
@@ -92,7 +94,7 @@ const Recommendations = () => {
                 (snippet) => snippet.communityId === item.id
               )
               return (
-                <Link key={item.id} href={`/r/${item.id}`}>
+                <>
                   <Flex
                     position='relative'
                     align='center'
@@ -101,7 +103,10 @@ const Recommendations = () => {
                     borderColor='gray.200'
                     p='10px 12px'
                     fontWeight={600}>
-                    <Flex width='80%' align='center'>
+                    <Flex
+                      onClick={() => router.push(`/r/${item.id}`)}
+                      width='80%'
+                      align='center'>
                       <Flex width='15%'>
                         <Text mr={2}>{index + 1}</Text>
                       </Flex>
@@ -143,7 +148,7 @@ const Recommendations = () => {
                       </Button>
                     </Box>
                   </Flex>
-                </Link>
+                </>
               )
             })}
             <Box p='10px 20px'>
