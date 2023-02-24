@@ -13,7 +13,6 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { FaReddit } from 'react-icons/fa'
@@ -30,7 +29,7 @@ const Recommendations = () => {
       const communityQuery = query(
         collection(firestore, 'communities'),
         orderBy('numberOfMembers', 'desc'),
-        limit(5)
+        limit(10)
       )
       const communityDocs = await getDocs(communityQuery)
       const communities = communityDocs.docs.map((doc) => ({
@@ -151,11 +150,11 @@ const Recommendations = () => {
                 </>
               )
             })}
-            <Box p='10px 20px'>
+            {/* <Box p='10px 20px'>
               <Button height='30px' width='100%'>
                 View All
               </Button>
-            </Box>
+            </Box> */}
           </>
         )}
       </Flex>
