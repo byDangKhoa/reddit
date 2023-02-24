@@ -95,18 +95,20 @@ const CreateCommunityModal = ({
             isModerator: true,
           }
         )
+        console.log('community Name', name)
       })
     } catch (error: any) {
       console.error('Transaction error', error)
       setNameError(error.message)
     }
+    console.log('community Name', name)
     // setSnippetState((prev) => ({
     //   ...prev,
     //   mySnippets: [],
     // }))
     toggleMenuOpen()
     handleClose()
-    router.push(`r/${name}`)
+    router.push(`/r/${name}`)
     setLoading(false)
   }
 

@@ -1,4 +1,14 @@
-import { useEffect } from 'react'
+import { Post, PostVote } from '@/atoms/PostAtom'
+import CreatePostLink from '@/components/Community/CreatePostLink'
+import PersonalHome from '@/components/Community/PersonalHome'
+import Premium from '@/components/Community/Premium'
+import Recommendations from '@/components/Community/Recommendations'
+import PageContent from '@/components/Layout/PageContent'
+import PostItem from '@/components/Posts/PostForm/PostItem'
+import PostLoader from '@/components/Posts/PostForm/PostLoader'
+import { auth, firestore } from '@/firebase/clientApp'
+import useCommunityData from '@/hook/useCommunityData'
+import usePosts from '@/hook/usePost'
 import { Stack } from '@chakra-ui/react'
 import {
   collection,
@@ -12,21 +22,8 @@ import {
   where,
 } from 'firebase/firestore'
 import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { useRecoilValue } from 'recoil'
-import { communityState } from '@/atoms/CommunitiesAtom'
-import { Post, PostVote } from '@/atoms/PostAtom'
-import CreatePostLink from '@/components/Community/CreatePostLink'
-import PostItem from '@/components/Posts/PostForm/PostItem'
-import PostLoader from '@/components/Posts/PostForm/PostLoader'
-import { auth, firestore } from '@/firebase/clientApp'
-import usePosts from '@/hook/usePost'
-import PageContent from '@/components/Layout/PageContent'
-import useCommunityData from '@/hook/useCommunityData'
-import Recommendations from '@/components/Community/Recommendations'
-import Premium from '@/components/Community/Premium'
-import PersonalHome from '@/components/Community/PersonalHome'
 
 const Home: NextPage = () => {
   const [user, loadingUser] = useAuthState(auth)
