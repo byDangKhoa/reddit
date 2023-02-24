@@ -1,6 +1,10 @@
 import React from 'react'
 import { Flex, Icon, Text } from '@chakra-ui/react'
-import { TabItem } from './NewPostForm'
+
+type TabItem = {
+  title: string
+  icon: typeof Icon.arguments
+}
 
 type TabItemProps = {
   item: TabItem

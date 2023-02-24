@@ -11,12 +11,10 @@ function SearchInput({ user }: Props) {
   return (
     <Flex maxWidth={user ? 'auto' : '600px'} flex='1' mr={2} align='center'>
       <InputGroup>
-        <InputLeftElement
-          height='34px'
-          width='34px'
-          pointerEvents='none'
-          children={<SearchIcon color='gray.400' />}
-        />
+        <InputLeftElement height='34px' width='34px' pointerEvents='none'>
+          <SearchIcon color='gray.400' />
+        </InputLeftElement>
+
         <Input
           borderRadius='60px'
           placeholder='Search Reddit'

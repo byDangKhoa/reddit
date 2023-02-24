@@ -1,42 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react'
-import {
-  Box,
-  Button,
-  Flex,
-  Icon,
-  Input,
-  Stack,
-  Textarea,
-  Image,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  Text,
-} from '@chakra-ui/react'
+import { Alert, AlertIcon, Flex, Icon, Text } from '@chakra-ui/react'
+import React, { useRef, useState } from 'react'
 
+import { firestore, storage } from '@/firebase/clientApp'
+import useSelectFile from '@/hook/useSelectFile'
+import { User } from 'firebase/auth'
 import {
   addDoc,
   collection,
-  doc,
   serverTimestamp,
   Timestamp,
   updateDoc,
 } from 'firebase/firestore'
+import { getDownloadURL, ref, uploadString } from 'firebase/storage'
 import { useRouter } from 'next/router'
 import { BiPoll } from 'react-icons/bi'
 import { BsLink45Deg, BsMic } from 'react-icons/bs'
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5'
-import { AiFillCloseCircle } from 'react-icons/ai'
-import { useRecoilState, useSetRecoilState } from 'recoil'
-import { getDownloadURL, ref, uploadString } from 'firebase/storage'
-import { firestore, storage } from '@/firebase/clientApp'
-import TabItem from './TabItem'
-import TextInputs from './PostForm/TextInput'
 import ImageUpload from './PostForm/ImageUpload'
-import { User } from 'firebase/auth'
-import { Post } from '@/atoms/PostAtom'
-import useSelectFile from '@/hook/useSelectFile'
+import TextInputs from './PostForm/TextInput'
+import TabItem from './TabItem'
 
 const formTabs = [
   {
@@ -60,11 +42,6 @@ const formTabs = [
     icon: BsMic,
   },
 ]
-
-export type TabItem = {
-  title: string
-  icon: typeof Icon.arguments
-}
 
 type NewPostFormProps = {
   user?: User | null
