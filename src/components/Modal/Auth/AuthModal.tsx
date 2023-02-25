@@ -53,7 +53,7 @@ export default function AuthModal() {
               direction='column'
               alignItems='center'
               justifyContent='center'
-              width='70%'>
+              width={{ base: '90%', md: '70%' }}>
               {modalState.type === 'login' || modalState.type === 'signup' ? (
                 <>
                   <Flex pb={6} direction='column'>

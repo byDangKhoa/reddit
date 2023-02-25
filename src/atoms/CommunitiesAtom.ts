@@ -2,6 +2,7 @@ import { atom } from 'recoil'
 import { FieldValue, Timestamp } from 'firebase/firestore'
 
 export interface Community {
+  name: string
   id: string
   creatorId: string
   numberOfMembers: number
@@ -28,6 +29,7 @@ export const defaultCommunity: Community = {
   numberOfMembers: 0,
   privacyType: 'public',
   imageURL: '',
+  name: '',
 }
 
 export const defaultCommunityState: CommunityState = {

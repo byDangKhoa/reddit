@@ -82,6 +82,7 @@ const CreateCommunityModal = ({
         }
         //create community
         transaction.set(communityDocRef, {
+          name: name,
           creatorId: userId,
           createdAt: serverTimestamp(),
           numberOfMembers: 1,

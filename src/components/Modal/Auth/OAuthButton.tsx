@@ -22,6 +22,7 @@ export default function OAuthButton() {
   return (
     <Flex direction='column' width='100%'>
       <Button
+        fontSize={{ base: '7pt', md: '10pt' }}
         isLoading={loading}
         onClick={() => signInWithGoogle()}
         variant='oauth'
@@ -29,16 +30,20 @@ export default function OAuthButton() {
         <Image
           alt='google logo'
           height='20px'
-          mr='4px'
+          mr='10px'
           src='/images/googlelogo.png'></Image>
         Continue with google
       </Button>
-      <Tooltip label='WIP' color='red.500' bg='white'>
-        <Button variant='oauth'>
+      <Tooltip
+        fontSize={{ base: '7pt', md: '10pt' }}
+        label='WIP'
+        color='red.500'
+        bg='white'>
+        <Button fontSize={{ base: '7pt', md: '10pt' }} variant='oauth'>
           <Image
             alt='apple logo'
             height='20px'
-            mr='4px'
+            mr='10px'
             src='/images/applelogo.png'></Image>
           Continue with Apple
         </Button>

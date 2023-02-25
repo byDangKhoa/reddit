@@ -13,12 +13,14 @@ import { Stack } from '@chakra-ui/react'
 import {
   collection,
   DocumentData,
+  endAt,
   getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
   QuerySnapshot,
+  startAt,
   where,
 } from 'firebase/firestore'
 import type { NextPage } from 'next'
@@ -85,7 +87,7 @@ const Home: NextPage = () => {
         const postQuery = query(
           collection(firestore, 'posts'),
           orderBy('voteStatus', 'desc'),
-          limit(30)
+          limit(10)
         )
         const postDocs = await getDocs(postQuery)
         const posts = postDocs.docs.map((doc) => ({
@@ -114,7 +116,7 @@ const Home: NextPage = () => {
       const postQuery = query(
         collection(firestore, 'posts'),
         orderBy('voteStatus', 'desc'),
-        limit(30)
+        limit(10)
       )
       const postDocs = await getDocs(postQuery)
       const posts = postDocs.docs.map((doc) => ({
