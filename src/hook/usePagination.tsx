@@ -17,7 +17,7 @@ function usePagination(data: [], itemsPerPage: number) {
     setCurrentPage((currentPage) => Math.max(currentPage - 1, 1))
   }
 
-  function jump(page) {
+  function jump(page: number) {
     const pageNumber = Math.max(1, page)
     setCurrentPage((currentPage) => Math.min(pageNumber, maxPage))
   }
