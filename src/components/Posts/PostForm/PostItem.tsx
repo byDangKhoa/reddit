@@ -162,7 +162,7 @@ const PostItem = ({
               )}
               <Text color='gray.500'>
                 Posted by u/{post.creatorDisplayName}{' '}
-                {formatDistanceToNow(new Date(post.createdAt.toDate()))}
+                {formatDistanceToNow(new Date(post.createdAt.seconds * 1000))}
               </Text>
             </Stack>
           )}

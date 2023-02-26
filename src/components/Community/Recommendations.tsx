@@ -21,38 +21,18 @@ import dynamic from 'next/dynamic'
 const AllCommunityModal = dynamic(() => import('./AllCommunityModal'), {
   ssr: false,
 })
-
-const Recommendations = () => {
+type Props = {
+  communitiesData: Community[]
+}
+const Recommendations = ({ communitiesData }: Props) => {
   const [communities, setCommunities] = useState<Community[]>([])
-  const [loading, setLoading] = useState(false)
   const { communityStateValue, onJoinLeaveCommunity } = useCommunityData()
   const router = useRouter()
   const [communityModal, setCommunityModal] = useState(false)
 
-  const getCommunityRecommendations = async () => {
-    setLoading(true)
-    try {
-      const communityQuery = query(
-        collection(firestore, 'communities'),
-        orderBy('numberOfMembers', 'desc'),
-        limit(5)
-      )
-      const communityDocs = await getDocs(communityQuery)
-      const communities = communityDocs.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Community[]
-
-      setCommunities(communities)
-    } catch (error: any) {
-      console.error('getCommunityRecommendations error', error.message)
-    }
-    setLoading(false)
-  }
-
   useEffect(() => {
-    getCommunityRecommendations()
-  }, [])
+    setCommunities(communitiesData)
+  }, [communitiesData])
 
   return (
     <Flex
@@ -77,7 +57,7 @@ const Recommendations = () => {
         Top Communities
       </Flex>
       <Flex direction='column'>
-        {loading ? (
+        {communities.length === 0 ? (
           <Stack mt={2} p={3}>
             <Flex justify='space-between' align='center'>
               <SkeletonCircle size='10' />
@@ -94,7 +74,7 @@ const Recommendations = () => {
           </Stack>
         ) : (
           <>
-            {communities.map((item, index) => {
+            {communities.map((item: any, index: number) => {
               const isJoined = !!communityStateValue.mySnippets.find(
                 (snippet) => snippet.communityId === item.id
               )

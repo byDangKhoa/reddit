@@ -1,3 +1,4 @@
+import { Community } from '@/atoms/CommunitiesAtom'
 import { Post, PostVote } from '@/atoms/PostAtom'
 import CreatePostLink from '@/components/Community/CreatePostLink'
 import PersonalHome from '@/components/Community/PersonalHome'
@@ -23,11 +24,16 @@ import {
   startAt,
   where,
 } from 'firebase/firestore'
-import type { NextPage } from 'next'
+import type { GetServerSidePropsContext, NextPage } from 'next'
 import { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import safeJsonStringify from 'safe-json-stringify'
+type Props = {
+  postData: Post[]
+  communitiesData: Community[]
+}
 
-const Home: NextPage = () => {
+const Home = function ({ postData, communitiesData }: Props) {
   const [user, loadingUser] = useAuthState(auth)
   const {
     postStateValue,
@@ -111,27 +117,10 @@ const Home: NextPage = () => {
   }
 
   const getNoUserHomePosts = async () => {
-    setLoading(true)
-    try {
-      const postQuery = query(
-        collection(firestore, 'posts'),
-        orderBy('voteStatus', 'desc'),
-        limit(10)
-      )
-      const postDocs = await getDocs(postQuery)
-      const posts = postDocs.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }))
-
-      setPostStateValue((prev) => ({
-        ...prev,
-        posts: posts as Post[],
-      }))
-    } catch (error: any) {
-      console.error('getNoUserHomePosts error', error.message)
-    }
-    setLoading(false)
+    setPostStateValue((prev) => ({
+      ...prev,
+      posts: postData as Post[],
+    }))
   }
 
   const getUserPostVotes = async () => {
@@ -209,7 +198,7 @@ const Home: NextPage = () => {
         )}
       </>
       <Stack spacing={5} position='sticky' top='14px'>
-        <Recommendations />
+        <Recommendations communitiesData={communitiesData} />
         <Premium />
         <PersonalHome />
       </Stack>
@@ -218,3 +207,41 @@ const Home: NextPage = () => {
 }
 
 export default Home
+
+export async function getServerSideProps() {
+  //get top communities
+  try {
+    const communityQuery = query(
+      collection(firestore, 'communities'),
+      orderBy('numberOfMembers', 'desc'),
+      limit(5)
+    )
+    const communityDocs = await getDocs(communityQuery)
+    const communities = communityDocs.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Community[]
+    //get home post
+    const postQuery = query(
+      collection(firestore, 'posts'),
+      orderBy('voteStatus', 'desc'),
+      limit(10)
+    )
+
+    const postDocs = await getDocs(postQuery)
+    const posts = postDocs.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }))
+
+    return {
+      props: {
+        postData: JSON.parse(safeJsonStringify(posts)), // needed for dates
+        communitiesData: JSON.parse(safeJsonStringify(communities)), // needed for dates
+      },
+    }
+  } catch (error) {
+    // Could create error page here
+    return { props: { postData: '', communitiesData: '' } }
+  }
+}
