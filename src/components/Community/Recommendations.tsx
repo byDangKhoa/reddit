@@ -157,16 +157,15 @@ const Recommendations = () => {
                 </Flex>
               )
             })}
-            <Tooltip fontSize='8pt' label='WIP' color='red.500'>
-              <Box p='10px 20px'>
-                <Button
-                  onClick={() => setCommunityModal(true)}
-                  height='30px'
-                  width='100%'>
-                  View All
-                </Button>
-              </Box>
-            </Tooltip>
+
+            <Box p='10px 20px'>
+              <Button
+                onClick={() => setCommunityModal(true)}
+                height='30px'
+                width='100%'>
+                View All
+              </Button>
+            </Box>
           </>
         )}
       </Flex>
