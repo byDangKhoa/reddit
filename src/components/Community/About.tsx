@@ -138,7 +138,7 @@ const About = ({ communityData, loading, pt, onCreatePage }: AboutProps) => {
                   </Text>
                 )}
               </Flex>
-              {!onCreatePage && (
+              {!onCreatePage && communityData.id && (
                 <Link href={`/r/${communityData.id}/submit`}>
                   <Button width='100%' mt={3} height='30px'>
                     Create Post

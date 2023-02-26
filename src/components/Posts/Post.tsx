@@ -43,7 +43,7 @@ const Posts = ({ communityData, userId, loadingUser }: PostsProps) => {
       ...prev,
       selectedPost: post,
     }))
-    router.push(`/r/${communityData?.id!}/comments/${post.id}`)
+    post.id && router.push(`/r/${communityData?.id!}/comments/${post.id}`)
   }
   useEffect(() => {
     // if (

@@ -31,6 +31,7 @@ const ActionIcons = () => {
 
         <Tooltip fontSize='8pt' label='WIP' color='red.500' bg='white'>
           <Flex
+            display={{ base: 'none', md: 'flex' }}
             mr={1.5}
             ml={1.5}
             padding={1}
@@ -43,6 +44,7 @@ const ActionIcons = () => {
 
         <Tooltip fontSize='8pt' label='WIP' color='red.500' bg='white'>
           <Flex
+            display={{ base: 'none', md: 'flex' }}
             mr={1.5}
             ml={1.5}
             padding={1}
@@ -56,6 +58,7 @@ const ActionIcons = () => {
       <>
         <Tooltip fontSize='8pt' label='WIP' color='red.500' bg='white'>
           <Flex
+            display={{ base: 'none', md: 'flex' }}
             mr={1.5}
             ml={1.5}
             padding={1}
@@ -68,6 +71,7 @@ const ActionIcons = () => {
 
         <Tooltip fontSize='8pt' label='WIP' color='red.500' bg='white'>
           <Flex
+            display={{ base: 'none', md: 'flex' }}
             mr={1.5}
             ml={1.5}
             padding={1}

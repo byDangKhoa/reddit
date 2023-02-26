@@ -109,7 +109,9 @@ const Recommendations = () => {
                   p='10px 12px'
                   fontWeight={600}>
                   <Flex
-                    onClick={() => router.push(`/r/${item.id}`)}
+                    onClick={() => {
+                      item.id && router.push(`/r/${item.id}`)
+                    }}
                     width='80%'
                     align='center'>
                     <Flex width='15%'>

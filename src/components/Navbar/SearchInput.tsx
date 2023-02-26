@@ -19,13 +19,8 @@ function SearchInput({ user }: Props) {
         </InputLeftElement>
 
         <Input
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              console.log('done')
-            }
-          }}
           borderRadius='60px'
-          placeholder='Search Reddit'
+          placeholder='Work in progress'
           fontSize='10pt'
           _placeholder={{ color: 'gray.500' }}
           _hover={{ bg: 'white', border: '1px solid blue.500' }}

@@ -33,7 +33,9 @@ const usePosts = (communityData?: Community) => {
       ...prev,
       selectedPost: post,
     }))
-    router.push(`/r/${post.communityId}/comments/${post.id}`)
+    post.communityId &&
+      post.id &&
+      router.push(`/r/${post.communityId}/comments/${post.id}`)
   }
 
   const onVote = async (

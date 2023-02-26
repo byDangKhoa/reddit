@@ -106,7 +106,7 @@ function AllCommunityModal({ communityModal, setCommunityModal }: Props) {
                         cursor='pointer'
                         onClick={() => {
                           setCommunityModal(false)
-                          router.push(`/r/${item.id}`)
+                          item.id && router.push(`/r/${item.id}`)
                         }}
                         width='80%'
                         align='center'>

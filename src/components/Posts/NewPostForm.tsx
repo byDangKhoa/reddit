@@ -1,5 +1,5 @@
 import { Alert, AlertIcon, Flex, Icon, Text } from '@chakra-ui/react'
-import React, { useRef, useState } from 'react'
+import React, { useReducer, useRef, useState } from 'react'
 
 import { firestore, storage } from '@/firebase/clientApp'
 import useSelectFile from '@/hook/useSelectFile'
@@ -46,13 +46,19 @@ const formTabs = [
 type NewPostFormProps = {
   user?: User | null
 }
-
+type TextInput = {
+  title: string
+  body: string
+}
 const NewPostForm = ({ user }: NewPostFormProps) => {
   const [selectedTab, setSelectedTab] = useState(formTabs[0].title)
-  const [textInputs, setTextInputs] = useState({
-    title: '',
-    body: '',
-  })
+
+  const [textInputs, setTextInputs] = useReducer(
+    (prev: TextInput, next: TextInput) => {
+      return { ...prev, ...next }
+    },
+    { title: '', body: '' }
+  )
 
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile()
   const selectFileRef = useRef<HTMLInputElement>(null)
@@ -101,7 +107,9 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
       //     ...prev,
       //     postUpdateRequired: true,
       //   }))
-      router.push(`/r/${communityId}/comments/${postDocRef.id}`)
+
+      postDocRef.id &&
+        router.push(`/r/${communityId}/comments/${postDocRef.id}`)
     } catch (error) {
       setError('Error creating post')
     }
@@ -111,10 +119,7 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
   const onTextChange = ({
     target: { name, value },
   }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setTextInputs((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+    setTextInputs({ [name]: value } as TextInput)
   }
 
   return (

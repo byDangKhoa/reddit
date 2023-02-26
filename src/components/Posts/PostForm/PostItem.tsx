@@ -77,7 +77,7 @@ const PostItem = ({
       })
 
       if (singlePostView) {
-        router.push(`/r/${post.communityId}`)
+        post.communityId && router.push(`/r/${post.communityId}`)
       }
     } catch (error: any) {
       toast({
