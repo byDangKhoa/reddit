@@ -1,6 +1,7 @@
 import { Community } from '@/atoms/CommunitiesAtom'
 import { Post, PostVote } from '@/atoms/PostAtom'
 import CreatePostLink from '@/components/Community/CreatePostLink'
+import FilterPost from '@/components/Community/FilterPost'
 import PersonalHome from '@/components/Community/PersonalHome'
 import Premium from '@/components/Community/Premium'
 import Recommendations from '@/components/Community/Recommendations'
@@ -25,7 +26,7 @@ import {
   where,
 } from 'firebase/firestore'
 import type { GetServerSidePropsContext, NextPage } from 'next'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import safeJsonStringify from 'safe-json-stringify'
 type Props = {
@@ -34,7 +35,9 @@ type Props = {
 }
 
 const Home = function ({ postData, communitiesData }: Props) {
+  const [category, setCategory] = useState('Top')
   const [user, loadingUser] = useAuthState(auth)
+
   const {
     postStateValue,
     setPostStateValue,
@@ -116,11 +119,33 @@ const Home = function ({ postData, communitiesData }: Props) {
     setLoading(false)
   }
 
-  const getNoUserHomePosts = async () => {
-    setPostStateValue((prev) => ({
-      ...prev,
-      posts: postData as Post[],
-    }))
+  const getNoUserHomePosts = async (category: string) => {
+    const orderByStatus = function () {
+      if (category === 'New') {
+        return 'createdAt'
+      }
+      return 'voteStatus'
+    }
+    setLoading(true)
+    try {
+      const postQuery = query(
+        collection(firestore, 'posts'),
+        orderBy(orderByStatus(), 'desc'),
+        limit(10)
+      )
+      const postDocs = await getDocs(postQuery)
+      const posts = postDocs.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      setPostStateValue((prev) => ({
+        ...prev,
+        posts: posts as Post[],
+      }))
+    } catch (error: any) {
+      console.error('getNoUserHomePosts error', error.message)
+    }
+    setLoading(false)
   }
 
   const getUserPostVotes = async () => {
@@ -146,15 +171,15 @@ const Home = function ({ postData, communitiesData }: Props) {
 
   useEffect(() => {
     if (communityStateValue.snippetsFetched) {
-      getUserHomePosts()
+      category === 'Default' ? getUserHomePosts() : getNoUserHomePosts(category)
     }
-  }, [communityStateValue.snippetsFetched])
+  }, [communityStateValue.snippetsFetched, category])
 
   useEffect(() => {
     if (!user && !loadingUser) {
-      getNoUserHomePosts()
+      getNoUserHomePosts(category)
     }
-  }, [user, loadingUser])
+  }, [user, loadingUser, category])
 
   useEffect(() => {
     if (!user || !postStateValue.posts.length) return
@@ -173,6 +198,7 @@ const Home = function ({ postData, communitiesData }: Props) {
     <PageContent>
       <>
         {/* <CreatePostLink /> */}
+        <FilterPost category={category} setCategory={setCategory} />
         {loading ? (
           <PostLoader />
         ) : (
