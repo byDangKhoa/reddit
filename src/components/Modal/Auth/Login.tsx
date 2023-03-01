@@ -18,6 +18,7 @@ export default function Login({}: Props) {
   })
   const [signInWithEmailAndPassword, _, loading, authError] =
     useSignInWithEmailAndPassword(auth)
+  console.log('error', authError?.message)
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -89,7 +90,7 @@ export default function Login({}: Props) {
         Log In
       </Button>
       {authError && (
-        <Text textAlign='left' mt={2} fontSize='10pt' color='red'>
+        <Text mb={2} textAlign='center' mt={2} fontSize='10pt' color='red'>
           {FIREBASE_ERRORS[authError?.message as keyof typeof FIREBASE_ERRORS]}
         </Text>
       )}

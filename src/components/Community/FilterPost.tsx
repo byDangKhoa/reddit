@@ -1,12 +1,7 @@
-import { Box, Flex, Icon, Text } from '@chakra-ui/react'
-import React, { useState } from 'react'
-import { BiBarChartAlt2, BiUpvote } from 'react-icons/bi'
+import { Flex, Icon, Text } from '@chakra-ui/react'
+import { BiBarChartAlt2 } from 'react-icons/bi'
 
-import { BsBarChartFill, BsBarChartLine, BsLink45Deg } from 'react-icons/bs'
-import { FaReddit } from 'react-icons/fa'
-import { GrAnalytics } from 'react-icons/gr'
-import { HiOutlineChartBar } from 'react-icons/hi'
-import { IoImageOutline } from 'react-icons/io5'
+import { BsBarChartLine } from 'react-icons/bs'
 import { MdOutlineNewReleases } from 'react-icons/md'
 
 const filterButtons = [

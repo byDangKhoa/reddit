@@ -35,7 +35,7 @@ type Props = {
 }
 
 const Home = function ({ postData, communitiesData }: Props) {
-  const [category, setCategory] = useState('Top')
+  const [category, setCategory] = useState('Default')
   const [user, loadingUser] = useAuthState(auth)
 
   const {
@@ -93,17 +93,7 @@ const Home = function ({ postData, communitiesData }: Props) {
       }
       // User has not joined any communities yet
       else {
-        const postQuery = query(
-          collection(firestore, 'posts'),
-          orderBy('voteStatus', 'desc'),
-          limit(10)
-        )
-        const postDocs = await getDocs(postQuery)
-        const posts = postDocs.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Post[]
-        feedPosts.push(...posts)
+        feedPosts.push(...postData)
       }
 
       setPostStateValue((prev) => ({
@@ -120,17 +110,17 @@ const Home = function ({ postData, communitiesData }: Props) {
   }
 
   const getNoUserHomePosts = async (category: string) => {
-    const orderByStatus = function () {
-      if (category === 'New') {
-        return 'createdAt'
-      }
-      return 'voteStatus'
-    }
+    // const orderByStatus = function () {
+    //   if (category === 'New') {
+    //     return 'createdAt'
+    //   }
+    //   return 'voteStatus'
+    // }
     setLoading(true)
     try {
       const postQuery = query(
         collection(firestore, 'posts'),
-        orderBy(orderByStatus(), 'desc'),
+        orderBy('createdAt', 'desc'),
         limit(10)
       )
       const postDocs = await getDocs(postQuery)
@@ -140,7 +130,7 @@ const Home = function ({ postData, communitiesData }: Props) {
       }))
       setPostStateValue((prev) => ({
         ...prev,
-        posts: posts as Post[],
+        posts: category === 'New' ? (posts as Post[]) : postData,
       }))
     } catch (error: any) {
       console.error('getNoUserHomePosts error', error.message)
