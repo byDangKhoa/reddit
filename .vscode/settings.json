@@ -4,5 +4,6 @@
   "turboConsoleLog.insertEnclosingClass": false,
   "turboConsoleLog.includeFileNameAndLineNum": false,
   "turboConsoleLog.logMessagePrefix": "",
-  "turboConsoleLog.delimiterInsideMessage": ""
+  "turboConsoleLog.delimiterInsideMessage": "",
+  "editor.guides.bracketPairs": "active"
 }

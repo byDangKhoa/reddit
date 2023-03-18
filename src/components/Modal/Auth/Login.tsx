@@ -18,8 +18,6 @@ export default function Login({}: Props) {
   })
   const [signInWithEmailAndPassword, _, loading, authError] =
     useSignInWithEmailAndPassword(auth)
-  console.log('error', authError?.message)
-
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     signInWithEmailAndPassword(loginForm.email, loginForm.password)
