@@ -50,6 +50,7 @@ type TextInput = {
   title: string
   body: string
 }
+
 const NewPostForm = ({ user }: NewPostFormProps) => {
   const [selectedTab, setSelectedTab] = useState(formTabs[0].title)
 
@@ -116,12 +117,6 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
     setLoading(false)
   }
 
-  const onTextChange = ({
-    target: { name, value },
-  }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setTextInputs({ [name]: value } as TextInput)
-  }
-
   return (
     <Flex direction='column' bg='white' borderRadius={4} mt={2}>
       <Flex width='100%'>
@@ -138,7 +133,7 @@ const NewPostForm = ({ user }: NewPostFormProps) => {
         {selectedTab === 'Post' && (
           <TextInputs
             textInputs={textInputs}
-            onChange={onTextChange}
+            setTextInputs={setTextInputs}
             handleCreatePost={handleCreatePost}
             loading={loading}
           />

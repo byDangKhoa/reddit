@@ -6,6 +6,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import type { AppProps } from 'next/app'
 import { RecoilRoot } from 'recoil'
 import { useEffect, useState } from 'react'
+import 'react-quill/dist/quill.snow.css'
 
 export default function App({ Component, pageProps }: AppProps) {
   const [showChild, setShowChild] = useState(false)

@@ -63,7 +63,7 @@ const Home = function ({ postData, communitiesData }: Props) {
         const myCommunityIds = communityStateValue.mySnippets.map(
           (snippet) => snippet.communityId
         )
-        // Getting 2 posts from 3 communities that user has joined
+        // Getting  posts from 3 communities that user has joined
         let postPromises: Array<Promise<QuerySnapshot<DocumentData>>> = []
         ;[0, 1, 2].forEach((index) => {
           if (!myCommunityIds[index]) return

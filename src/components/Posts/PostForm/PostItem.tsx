@@ -169,7 +169,9 @@ const PostItem = ({
           <Text fontSize='12pt' fontWeight={600}>
             {post.title}
           </Text>
-          <Text fontSize='10pt'>{post.body}</Text>
+          <Text
+            dangerouslySetInnerHTML={{ __html: post.body }}
+            fontSize='10pt'></Text>
           {post.imageURL && (
             <Flex justify='center' align='center' p={2}>
               {loadingImage && (
